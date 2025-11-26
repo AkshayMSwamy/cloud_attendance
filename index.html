@@ -1,0 +1,54 @@
+<!-- Save this file as index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Cloud Attendance - Super Simple</title>
+</head>
+<body style="font-family: Arial, sans-serif; max-width:500px; margin:40px;">
+  <h2>Mark Attendance</h2>
+  <p>Type your name and click Submit.</p>
+
+  <input id="name" placeholder="Your name" style="width:100%; padding:8px; font-size:16px;">
+  <br><br>
+  <button id="btn" style="padding:10px 16px; font-size:16px;">Submit</button>
+  <p id="msg" style="color:green;"></p>
+
+  <script>
+    const WEB_APP_URL = https://script.google.com/macros/s/AKfycbxlNZ_bjMsQbQSNrZjdQuy4nXKyKHpKRuGKrymp1UZFQ2NA2pv3EbEnr136S-k9Bp8X/exec
+
+    document.getElementById('btn').addEventListener('click', function() {
+      document.getElementById('msg').style.color = 'green';
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        document.getElementById('msg').style.color = 'red';
+        document.getElementById('msg').innerText = "Please enter your name!";
+        return;
+      }
+
+      document.getElementById('msg').innerText = "Sending...";
+
+      fetch(WEB_APP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.status === "success") {
+          document.getElementById('msg').style.color = 'green';
+          document.getElementById('msg').innerText = "Attendance saved! ✅";
+          document.getElementById('name').value = "";
+        } else {
+          document.getElementById('msg').style.color = 'red';
+          document.getElementById('msg').innerText = "Error: " + (data && data.message ? data.message : "Unknown");
+        }
+      })
+      .catch(err => {
+        document.getElementById('msg').style.color = 'red';
+        document.getElementById('msg').innerText = "Network error: " + err.message;
+      });
+    });
+  </script>
+</body>
+</html>

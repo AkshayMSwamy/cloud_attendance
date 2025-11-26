@@ -1,0 +1,9 @@
+function loginDemo() {
+  document.getElementById('message').innerText = 'Logged in as: DemoStudent';
+}
+
+function markAttendance() {
+  // This is the demo action — later we will save this to the cloud
+  const now = new Date().toLocaleString();
+  alert('Attendance marked at ' + now);
+}
